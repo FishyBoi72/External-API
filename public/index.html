@@ -3,11 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Tracks from Shazam</title>
+    <title>HTTP Cat Images</title>
+    <style>
+        body {
+            background-color: #3498db;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            text-align: center;
+        }
+
+        #catImage {
+            margin-top: 20px;
+        }
+
+        #catImage img {
+            outline: 2px solid #fff;
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+    </style>
 </head>
 <body>
-    <h1>Top Tracks from Shazam</h1>
-    <div id="tracksList"></div>
+    <h1>HTTP Cat Images</h1>
+    <form id="statusCodeForm">
+        <label for="statusCode">Enter HTTP Status Code:</label>
+        <input type="text" id="statusCode" name="statusCode" required>
+        <button type="submit">Fetch Cat Image</button>
+    </form>
+    <div id="catImage"></div>
 
     <script src="script.js"></script>
 </body>

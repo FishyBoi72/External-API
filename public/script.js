@@ -1,29 +1,23 @@
-document.addEventListener('DOMContentLoaded', async function () {
+document.getElementById('statusCodeForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const statusCode = document.getElementById('statusCode').value.trim();
+
     try {
-        const response = await fetch('/top-tracks');
+        const response = await fetch(`/http-cat/${statusCode}`);
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        displayTracks(data);
+        displayCatImage(data.imageSrc);
     } catch (error) {
         console.error('Fetch error:', error);
-        const tracksList = document.getElementById('tracksList');
-        tracksList.innerText = 'Error fetching top tracks: ' + error.message;
+        const catImage = document.getElementById('catImage');
+        catImage.innerHTML = 'Error: That code doesn\'t exist!';
     }
 });
 
-function displayTracks(tracks) {
-    const tracksList = document.getElementById('tracksList');
-    tracksList.innerHTML = ''; // Clear previous content
-
-    tracks.forEach(track => {
-        const trackElement = document.createElement('div');
-        trackElement.innerHTML = `
-            <p><strong>Title:</strong> ${track.title}</p>
-            <p><strong>Artist:</strong> ${track.subtitle}</p>
-            <hr>
-        `;
-        tracksList.appendChild(trackElement);
-    });
+function displayCatImage(imageSrc) {
+    const catImage = document.getElementById('catImage');
+    catImage.innerHTML = `<img src="${imageSrc}" alt="HTTP Cat Image">`;
 }

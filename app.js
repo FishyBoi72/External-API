@@ -20,28 +20,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Route to fetch top tracks from Shazam API
-app.get('/top-tracks', async (req, res) => {
-    const options = {
-        method: 'GET',
-        url: 'https://shazam.p.rapidapi.com/charts/track',
-        params: {
-            locale: 'en-US',
-            pageSize: '20',
-            startFrom: '0'
-        },
-        headers: {
-            'x-rapidapi-key': '7411822642mshffd982216479018p1dd3f1jsn64703637bb8d',
-            'x-rapidapi-host': 'shazam.p.rapidapi.com'
-        }
-    };
+// Route to fetch cat images based on HTTP status code
+app.get('/http-cat/:statusCode', async (req, res) => {
+    const { statusCode } = req.params;
+    const url = `https://http.cat/${statusCode}`;
 
     try {
-        const response = await axios.request(options);
-        res.json(response.data);
+        const response = await axios.get(url, { responseType: 'arraybuffer' });
+        if (response.status === 404) {
+            throw new Error('HTTP Cat image not found');
+        }
+        const imageBase64 = Buffer.from(response.data, 'binary').toString('base64');
+        const imageSrc = `data:image/png;base64,${imageBase64}`;
+        res.json({ imageSrc });
     } catch (error) {
-        console.error('Error fetching top tracks:', error);
-        res.status(500).json({ error: 'Failed to fetch top tracks' });
+        console.error('Error fetching HTTP Cat image:', error.message);
+        res.status(404).json({ error: 'That code doesn\'t exist!' });
     }
 });
 
